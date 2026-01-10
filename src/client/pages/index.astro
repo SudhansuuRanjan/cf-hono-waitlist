@@ -1,0 +1,28 @@
+---
+import Hero from "../components/Hero.astro";
+import Layout from "../layouts/Layout.astro";
+import Signup from "../components/Signup";
+import Card from "../components/Card.astro";
+import { ServerStatus } from "../components/ServerStatus";
+import TotalSubscribers from "../components/TotalSubscribers";
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+  <Hero />
+  <div class="my-10 flex flex-col gap-3 items-center justify-center">
+    <Signup client:load />
+    <TotalSubscribers client:load/>
+  </div>
+
+  <ServerStatus client:load />
+
+  {/* Example usage of Card component */}
+  <div class="space-y-4 p-4 md:flex md:gap-3 md:space-y-0 items-center justify-center">
+    <Card title="Cookies!" description="We are using cookies for no reason." />
+    <Card title="More Info" description="This is an example of a reusable card component." />
+    <Card title="Join Us" description="Sign up to stay updated with the latest news!" />
+  </div>
+</Layout>

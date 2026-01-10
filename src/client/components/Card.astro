@@ -1,0 +1,16 @@
+---
+export interface CardProps {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+
+<div class="card bg-neutral text-neutral-content w-96 mx-auto md:mx-0">
+  <div class="card-body items-center text-center">
+    <h2 class="card-title">{title}</h2>
+    <p>{description}</p>
+  </div>
+</div>

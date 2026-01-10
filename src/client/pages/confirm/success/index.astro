@@ -1,0 +1,36 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+---
+
+<Layout title="Confirm - Success">
+  <div class="hero min-h-screen">
+    <div class="hero-content text-center">
+      <div class="max-w-md">
+        <h1 class="mb-16 text-3xl font-bold">NanoMark</h1>
+        <div class="alert alert-success shadow-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 shrink-0 stroke-current"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <div>
+            <h3 class="font-bold">Success!</h3>
+            <div class="text-xs">Your subscription has been confirmed successfully.</div>
+          </div>
+        </div>
+        <p class="text-neutral-content py-6">
+          Thank you for subscribing! You'll receive updates about our launch.
+        </p>
+        <a href="/" class="btn btn-primary">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</Layout>

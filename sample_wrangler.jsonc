@@ -1,0 +1,41 @@
+{
+  "name": "cf-hono-waitlist",
+  "main": "src/server/index.ts",
+  "compatibility_date": "2025-10-11",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "db",
+      "database_name": "db",
+      "database_id": "123",
+      "migrations_dir": "src/server/db/migrations"
+    }
+  ],
+  "env": {
+    "staging": {
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "CF_ACCESS_DOMAIN": "",
+        "POLICY_AUD": "",
+        "API_URL":"",
+        "RESEND_API_KEY":""
+      },
+      "d1_databases": [
+        {
+          "binding": "db",
+          "database_name": "db",
+          "database_id": "<DATABASE_ID>",
+          "migrations_dir": "src/server/db/migrations"
+        }
+      ]
+    },
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production"
+      }
+    }
+  }
+}
