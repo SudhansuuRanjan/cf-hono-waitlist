@@ -113,7 +113,7 @@ app.post("/api/subscribe", async (c) => {
 });
 
 app.get("/api/health", (c) => {
-  return c.json({ status: "healthy", timestamp: new Date().toISOString() });
+  return c.json({ status: "Healthy", timestamp: new Date().toISOString() });
 });
 
 app.get("/api/subscriber-count", async (c) => {

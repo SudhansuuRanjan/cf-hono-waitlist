@@ -6,8 +6,48 @@ import Card from "../components/Card.astro";
 import { ServerStatus } from "../components/ServerStatus";
 import TotalSubscribers from "../components/TotalSubscribers";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const features = [
+  {
+    title: "On-Device AI Analysis",
+    description: "Uses Chrome's built-in LanguageModel API to analyze your bookmarks without sending data to a server. 100% local processing.",
+    icon: "🤖"
+  },
+  {
+    title: "Smart Multi-Categorization",
+    description: "Automatically assigns relevant categories like 'Programming', 'AI', 'Utility' to every bookmark. You can customize categories.",
+    icon: "🏷️"
+  },
+  {
+    title: "AI Summaries",
+    description: "Generates clean, one-sentence summaries for each link based on title, URL, and webpage content.",
+    icon: "📝"
+  },
+  {
+    title: "Persistent Caching",
+    description: "All AI data is saved locally. Scan once and the extension automatically picks up new bookmarks needing analysis.",
+    icon: "💾"
+  },
+  {
+    title: "Modern Card-Based UI",
+    description: "Clean interface showing favicon, title, base URL, categories, and summary for each bookmark.",
+    icon: "✨"
+  },
+  {
+    title: "Advanced Filtering & Search",
+    description: "Filter by status (Unviewed, Important) and topic. Search across title, URL, and summary instantly.",
+    icon: "🔍"
+  },
+  {
+    title: "Read-it-Later Queue",
+    description: "Toggle bookmark status with an 'Eye' icon to track what you've read. Filter to show only unviewed items.",
+    icon: "👁️"
+  },
+  {
+    title: "Export to JSON",
+    description: "Download your entire AI-enhanced bookmark list including all tags and statuses as a clean JSON file.",
+    icon: "📤"
+  }
+];
 ---
 
 <Layout>
@@ -19,10 +59,34 @@ import TotalSubscribers from "../components/TotalSubscribers";
 
   <ServerStatus client:load />
 
-  {/* Example usage of Card component */}
-  <div class="space-y-4 p-4 md:flex md:gap-3 md:space-y-0 items-center justify-center">
-    <Card title="Cookies!" description="We are using cookies for no reason." />
-    <Card title="More Info" description="This is an example of a reusable card component." />
-    <Card title="Join Us" description="Sign up to stay updated with the latest news!" />
+  <div class="max-w-6xl mx-auto px-4 pt-10">
+    <h2 class="text-2xl font-bold text-center text-accent mb-8">NanoMarks Features</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {features.map((feature) => (
+        <Card title={feature.title} description={feature.description} icon={feature.icon} />
+      ))}
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 my-12">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-2xl font-bold justify-center mb-4">How to Use</h2>
+        <div class="steps steps-vertical">
+          <div class="step step-primary">
+            <p><strong>Load the Extension:</strong> Open Chrome at chrome://extensions, enable "Developer mode", and click "Load unpacked"</p>
+          </div>
+          <div class="step step-primary">
+            <p><strong>Run First Scan:</strong> Click the extension icon and hit "Scan Bookmarks" to process all uncached bookmarks</p>
+          </div>
+          <div class="step step-primary">
+            <p><strong>Manage Bookmarks:</strong> Use search, filters, and category pills. Add current pages for real-time AI analysis</p>
+          </div>
+          <div class="step step-primary">
+            <p><strong>Export Data:</strong> Download your enhanced bookmark list as JSON anytime</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </Layout>
