@@ -9,29 +9,38 @@ import {
 } from "./db/queries";
 import { sendEmailWithResend } from "./service/email";
 import { generateRandomID } from "./utils/generateToken";
-import type { D1Database } from "@cloudflare/workers-types";
+import type { D1Database, RateLimit } from "@cloudflare/workers-types";
 import { z } from "zod";
+import { rateLimit } from "./middleware/ratelimit";
 
 type Bindings = {
   cfwl_staging_db: D1Database;
+  MY_RATE_LIMITER: RateLimit;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
 app.use(accessAuth);
+app.use(rateLimit);
 
 const subscribeSchema = z.object({
-  email: z.email({ message: "Invalid email address", pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
+  email: z.email({
+    message: "Invalid email address",
+    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  }),
   traffic_source: z.string().optional(),
   device: z.string().optional(),
 });
 
 const stripPlusAlias = (email: string): string => {
-  return email.split("@").map((part, index) => {
-    if (index === 0) {
-      return part.replace(/\+[a-zA-Z0-9_-]+$/, "");
-    }
-    return part;
-  }).join("@");
+  return email
+    .split("@")
+    .map((part, index) => {
+      if (index === 0) {
+        return part.replace(/\+[a-zA-Z0-9_-]+$/, "");
+      }
+      return part;
+    })
+    .join("@");
 };
 
 app.post("/api/subscribe", async (c) => {
