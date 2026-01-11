@@ -1,0 +1,36 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404 - Page Not Found">
+  <div class="hero min-h-screen">
+    <div class="hero-content text-center">
+      <div class="max-w-md">
+        <h1 class="mb-16 text-3xl font-bold">NanoMark</h1>
+        <div class="alert alert-warning shadow-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 shrink-0 stroke-current"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+            />
+          </svg>
+          <div>
+            <h3 class="font-bold">404 - Page Not Found</h3>
+            <div class="text-xs">The page you're looking for doesn't exist.</div>
+          </div>
+        </div>
+        <p class="text-neutral-content py-6">
+          Oops! The page you're looking for has been moved or doesn't exist.
+        </p>
+        <a href="/" class="btn btn-primary">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</Layout>

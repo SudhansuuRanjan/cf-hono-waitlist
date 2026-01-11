@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const TotalSubscribers = () => {
-  const [count, setCount] = useState("");
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     fetch("/api/subscriber-count")
@@ -11,7 +11,15 @@ const TotalSubscribers = () => {
       });
   }, []);
   return (
-    <div className="text-neutral-content text-sm">Join {count} other developers! 🚀</div>
+    <>
+      {count && (
+        <div className="text-neutral-content text-sm">
+          Join{" "}
+          <span className="font-semibold text-shadow-green-500">{count}</span>{" "}
+          other developers! 🚀
+        </div>
+      )}
+    </>
   );
 };
 

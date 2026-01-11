@@ -7,6 +7,7 @@ export const sendEmailWithResend = async (
   subject: string,
   token: string,
 ) => {
+  const requestId = crypto.randomUUID();
   const confirmUrl = `${c.env.API_URL}/api/confirm?token=${token}`;
   const unsubUrl = `${c.env.API_URL}/api/unsubscribe?token=${token}`;
   const resend = new Resend(c.env.RESEND_API_KEY);
@@ -82,8 +83,23 @@ export const sendEmailWithResend = async (
   });
 
   if (error) {
-    console.error(error.message);
+    console.error({
+      requestId,
+      function: "sendEmailWithResend",
+      action: "email_send_failed",
+      email,
+      error: error.message,
+    });
+    return null;
   }
+
+  console.log({
+    requestId,
+    function: "sendEmailWithResend",
+    action: "email_send_success",
+    email,
+    messageId: data?.id,
+  });
 
   return data;
 };

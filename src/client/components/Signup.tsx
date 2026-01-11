@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +31,7 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email.trim()) {
+    if (!email.trim() || !EMAIL_REGEX.test(email.trim())) {
       setMessage("Please enter a valid email address");
       setIsError(true);
       return;
