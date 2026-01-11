@@ -20,7 +20,7 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 app.use(accessAuth);
-app.use(rateLimit);
+app.use("/*", rateLimit);
 
 const subscribeSchema = z.object({
   email: z.email({
