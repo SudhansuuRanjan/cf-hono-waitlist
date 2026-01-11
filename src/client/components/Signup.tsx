@@ -2,6 +2,15 @@ import React, { useState } from "react";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+const stripPlusAlias = (email: string): string => {
+  return email.split("@").map((part, index) => {
+    if (index === 0) {
+      return part.replace(/\+[a-zA-Z0-9_-]+$/, "");
+    }
+    return part;
+  }).join("@");
+};
+
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -42,13 +51,14 @@ const Signup = () => {
     setIsError(false);
 
     try {
+      const normalizedEmail = stripPlusAlias(email.trim());
       const response = await fetch("/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: email.trim(),
+          email: normalizedEmail,
           device: getDeviceOS(),
           traffic_source: getTrafficSource(),
         }),

@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { accessAuth } from "./middleware/auth";
-import { getDb } from "./db/db";
 import type { NewSubscriber } from "./db/schema";
 import {
   insertSubscriber,
@@ -11,8 +10,7 @@ import {
 import { sendEmailWithResend } from "./service/email";
 import { generateRandomID } from "./utils/generateToken";
 import type { D1Database } from "@cloudflare/workers-types";
-
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+import { z } from "zod";
 
 type Bindings = {
   cfwl_staging_db: D1Database;
@@ -21,30 +19,47 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>();
 app.use(accessAuth);
 
+const subscribeSchema = z.object({
+  email: z.email({ message: "Invalid email address", pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
+  traffic_source: z.string().optional(),
+  device: z.string().optional(),
+});
+
+const stripPlusAlias = (email: string): string => {
+  return email.split("@").map((part, index) => {
+    if (index === 0) {
+      return part.replace(/\+[a-zA-Z0-9_-]+$/, "");
+    }
+    return part;
+  }).join("@");
+};
+
 app.post("/api/subscribe", async (c) => {
   const requestId = crypto.randomUUID();
   const startTime = Date.now();
 
   try {
     const body = await c.req.json();
-    const { email, traffic_source, device } = body;
+    const result = subscribeSchema.safeParse(body);
 
-    if (typeof email !== "string" || !email.trim() || !EMAIL_REGEX.test(email.trim())) {
+    if (!result.success) {
       console.log({
         requestId,
         endpoint: "/api/subscribe",
         action: "validation_failed",
-        reason: "invalid_email",
+        reason: "invalid_input",
+        errors: result.error.format(),
       });
       return c.json({ error: "Valid email is required" }, 400);
     }
 
+    const { email, traffic_source, device } = result.data;
+    const normalizedEmail = stripPlusAlias(email);
     let token = generateRandomID(24);
     const newSub: NewSubscriber = {
-      email: email.trim(),
-      trafficSource:
-        typeof traffic_source === "string" ? traffic_source : undefined,
-      device: typeof device === "string" ? device : undefined,
+      email: normalizedEmail,
+      trafficSource: traffic_source,
+      device: device,
       confirmationToken: token,
     };
 
@@ -62,7 +77,7 @@ app.post("/api/subscribe", async (c) => {
       requestId,
       endpoint: "/api/subscribe",
       action: "subscribe_success",
-      email: email.trim(),
+      email: normalizedEmail,
       duration_ms: duration,
     });
 
@@ -83,20 +98,6 @@ app.post("/api/subscribe", async (c) => {
         duration_ms: duration,
       });
       return c.json({ error: "Email already registered" }, 409);
-    }
-
-    if (
-      error?.message?.includes("Failed to parse JSON") ||
-      error?.message?.includes("Invalid JSON")
-    ) {
-      console.log({
-        requestId,
-        endpoint: "/api/subscribe",
-        action: "subscribe_failed",
-        reason: "invalid_json",
-        duration_ms: duration,
-      });
-      return c.json({ error: "Invalid JSON in request body" }, 400);
     }
 
     console.error({
