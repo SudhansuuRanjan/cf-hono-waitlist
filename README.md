@@ -1,46 +1,89 @@
-# Astro Starter Kit: Basics
+# NanoMarks - AI Bookmark Manager
 
-```sh
-bun create astro@latest -- --template basics
+NanoMarks is a Chrome extension that uses your browser's built-in, on-device AI (Gemini Nano) to automatically categorize, summarize, and organize your entire bookmark collection. Your bookmarks are a mess; this extension fixes them.
+
+🔒 All processing is done 100% locally on your machine. Your data, URLs, and browsing habits never leave your computer.
+
+## Features
+
+- **On-Device AI Analysis**: Uses Chrome's built-in LanguageModel API to analyze your bookmarks without sending data to a server.
+- **Smart Multi-Categorization**: Automatically assigns relevant categories to every bookmark.
+- **AI Summaries**: Generates clean, one-sentence summaries for each link.
+- **Persistent Caching**: All AI data is saved locally. Scan once.
+- **Modern Card-Based UI**: Clean interface showing favicon, title, categories, and summary.
+- **Advanced Filtering & Search**: Filter by status and topic. Search across all data.
+- **Full Management Tools**: Star bookmarks, track read status, copy links, add current page.
+- **Export to JSON**: Download your enhanced bookmark list anytime.
+
+## Tech Stack
+
+- **Frontend**: Astro, React, Tailwind CSS, DaisyUI
+- **Backend**: Cloudflare Workers, Hono, D1 Database, Drizzle ORM
+- **Email**: Resend
+- **AI**: Chrome Built-in AI (Gemini Nano)
+
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh) runtime
+- [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) CLI
+- Cloudflare account
+
+### Installation
+
+```bash
+# Install dependencies
+bun install
+
+# Run locally (client + worker)
+bun dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Development
 
-## 🚀 Project Structure
+```bash
+# Start client only (Astro dev server)
+bun run client
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+# Start worker only (Wrangler dev)
+bun run worker
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Deployment
 
-## 🧞 Commands
+```bash
+# Deploy to staging
+bun run deploy:staging
 
-All commands are run from the root of the project, from a terminal:
+# Deploy to production
+bun run deploy:prod
+```
 
-| Command               | Action                                           |
-| :-------------------- | :----------------------------------------------- |
-| `bun install`         | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
+## Project Structure
 
-## 👀 Want to learn more?
+```
+src/
+├── client/          # Astro frontend
+│   ├── components/  # React & Astro components
+│   ├── layouts/     # Page layouts
+│   ├── pages/       # Static pages
+│   └── styles/      # Global styles
+└── server/          # Cloudflare Worker
+    ├── db/          # Database schema & queries
+    ├── middleware/  # Auth & rate limiting
+    ├── service/     # Email service
+    └── utils/       # Helper functions
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## API Endpoints
+
+- `POST /api/subscribe` - Subscribe to waitlist
+- `GET /api/subscriber-count` - Get subscriber count
+- `GET /api/confirm` - Confirm subscription
+- `GET /api/unsubscribe` - Unsubscribe
+- `GET /api/health` - Health check
+
+## License
+
+MIT
